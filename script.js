@@ -159,6 +159,73 @@ phrases.forEach((phrase, index) => {
 });
 scene.add(textGroup);
 
+// Confeti con volumen: piezas que ascienden y giran en los tres ejes.
+const confettiCount = window.innerWidth < 600 ? 100 : 180;
+const confettiGeometry = new THREE.BoxGeometry(0.16, 0.3, 0.035);
+const confettiMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
+const confetti = new THREE.InstancedMesh(confettiGeometry, confettiMaterial, confettiCount);
+confetti.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+confetti.frustumCulled = false;
+const confettiDummy = new THREE.Object3D();
+const confettiPalette = [0xff82bc, 0xffd879, 0xbda0ff, 0x80e5dc, 0xfff0ce];
+const confettiMotion = Array.from({ length: confettiCount }, (_, i) => {
+  confetti.setColorAt(i, new THREE.Color(confettiPalette[i % confettiPalette.length]));
+  return {
+    angle: Math.random() * Math.PI * 2,
+    radius: 7 + Math.random() * 19,
+    duration: 10 + Math.random() * 12,
+    phase: Math.random(),
+    spin: 0.5 + Math.random() * 1.4,
+    size: 0.6 + Math.random() * 0.9
+  };
+});
+scene.add(confetti);
+
+// Pequeñas chispas luminosas entre las piezas de confeti.
+const sparkCanvas = document.createElement('canvas');
+sparkCanvas.width = sparkCanvas.height = 32;
+const sparkContext = sparkCanvas.getContext('2d');
+const sparkGradient = sparkContext.createRadialGradient(16, 16, 0, 16, 16, 16);
+sparkGradient.addColorStop(0, '#ffffff');
+sparkGradient.addColorStop(0.2, '#ffe5a4');
+sparkGradient.addColorStop(1, 'rgba(255, 180, 70, 0)');
+sparkContext.fillStyle = sparkGradient;
+sparkContext.fillRect(0, 0, 32, 32);
+const sparkPositions = new Float32Array(confettiCount * 3);
+const sparkGeometry = new THREE.BufferGeometry();
+sparkGeometry.setAttribute('position', new THREE.BufferAttribute(sparkPositions, 3));
+sparkGeometry.attributes.position.setUsage(THREE.DynamicDrawUsage);
+const sparks = new THREE.Points(sparkGeometry, new THREE.PointsMaterial({
+  map: new THREE.CanvasTexture(sparkCanvas), size: 0.24,
+  transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+  color: 0xffdbab, opacity: 0.85
+}));
+sparks.frustumCulled = false;
+scene.add(sparks);
+const confettiReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+function animateConfetti(time) {
+  const t = confettiReducedMotion.matches ? 0 : time;
+  confettiMotion.forEach((particle, i) => {
+    const life = (t / particle.duration + particle.phase) % 1;
+    const angle = particle.angle + Math.sin(t * 0.25 + i) * 0.12;
+    const x = Math.cos(angle) * particle.radius;
+    const z = Math.sin(angle) * particle.radius;
+    const y = -5 + life * 29;
+    const size = particle.size * Math.min(1, life * 10, (1 - life) * 10);
+    confettiDummy.position.set(x, y, z);
+    confettiDummy.rotation.set(t * particle.spin + i, t * 0.6 + i, t * 0.8 + i);
+    confettiDummy.scale.setScalar(size);
+    confettiDummy.updateMatrix();
+    confetti.setMatrixAt(i, confettiDummy.matrix);
+    sparkPositions[i * 3] = x + Math.sin(t + i) * 0.6;
+    sparkPositions[i * 3 + 1] = -6 + ((life + 0.3) % 1) * 31;
+    sparkPositions[i * 3 + 2] = z + Math.cos(t + i) * 0.6;
+  });
+  confetti.instanceMatrix.needsUpdate = true;
+  sparkGeometry.attributes.position.needsUpdate = true;
+}
+
 // Redimensionar pantalla
 window.addEventListener('resize', () => {
   camera.aspect = window.innerWidth / window.innerHeight;
@@ -188,6 +255,7 @@ function animate() {
   requestAnimationFrame(animate);
   if (!galaxyVisible || document.hidden) return;
   const elapsedTime = clock.getElapsedTime();
+  animateConfetti(elapsedTime);
 
   galaxyPoints.rotation.y = elapsedTime * 0.05;
 

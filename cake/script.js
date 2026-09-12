@@ -81,7 +81,7 @@ class Camera {
 	}
 
 	updateScene() {
-		this.scene.style.transform = `translate(-50%, -50%) translateZ(calc(var(--translateZ) * 1px)) rotateX(${Math.min(80, this.rotation.x)}deg) rotateZ(${this.rotation.z}deg) scale(${this.zoom})`
+		this.scene.style.transform = `translate(-50%, calc(-50% + var(--celebration-shift, 0px))) translateZ(calc(var(--translateZ) * 1px)) rotateX(${Math.min(80, this.rotation.x)}deg) rotateZ(${this.rotation.z}deg) scale(calc(${this.zoom} * var(--celebration-scale, 1)))`
 		this.galaxy.followTilt(this.rotation.x)
 	}
 
@@ -183,6 +183,60 @@ class GalaxyTransition {
 	}
 }
 
+function startBirthdaySparkler(candle) {
+	if (candle.querySelector('.birthday-sparkler')) return
+	const fountain = document.createElement('div')
+	fountain.className = 'birthday-sparkler'
+	fountain.setAttribute('aria-hidden', 'true')
+	const core = document.createElement('div')
+	core.className = 'sparkler-core'
+	core.append(document.createElement('span'), document.createElement('span'))
+	fountain.appendChild(core)
+	const count = window.innerWidth < 600 ? 64 : 96
+	for (let i = 0; i < count; i++) {
+		const spark = document.createElement('span')
+		const angle = Math.random() * Math.PI * 2
+		const spread = 40 + Math.random() * 100
+		spark.className = 'sparkler-particle'
+		spark.style.setProperty('--spark-x', `${Math.cos(angle) * spread}`)
+		spark.style.setProperty('--spark-y', `${Math.sin(angle) * spread}`)
+		spark.style.setProperty('--spark-height', `${95 + Math.random() * 125}`)
+		spark.style.setProperty('--spark-length', `${7 + Math.random() * 18}`)
+		spark.style.setProperty('--spark-lean', `${Math.random() * 60 - 30}deg`)
+		spark.style.setProperty('--spark-duration', `${0.85 + Math.random() * 0.8}s`)
+		spark.style.setProperty('--spark-delay', `${Math.random() * 1.2}s`)
+		fountain.appendChild(spark)
+	}
+	const palette = ['#ff78b5', '#ffd16d', '#a58aff', '#75e1d3', '#fff1cb']
+	for (let i = 0; i < count; i++) {
+		const piece = document.createElement('span')
+		const angle = Math.random() * Math.PI * 2
+		const radius = 80 + Math.random() * 170
+		piece.className = 'candle-burst-confetti'
+		piece.style.setProperty('--burst-x', `${Math.cos(angle) * radius}`)
+		piece.style.setProperty('--burst-y', `${Math.sin(angle) * radius}`)
+		piece.style.setProperty('--burst-height', `${90 + Math.random() * 100}`)
+		piece.style.setProperty('--burst-color', palette[i % palette.length])
+		piece.style.setProperty('--burst-spin', `${360 + Math.random() * 720}deg`)
+		piece.style.setProperty('--burst-duration', `${4 + Math.random() * 2}s`)
+		// Primera explosión inmediata, seguida de una cola que termina antes de 10 s.
+		piece.style.setProperty('--burst-delay', `${i < count / 2 ? Math.random() * 0.2 : Math.random() * 3.5}s`)
+		fountain.appendChild(piece)
+	}
+	candle.appendChild(fountain)
+	candle.classList.add('is-sparkling')
+	document.body.classList.add('sparkler-active', 'sparkler-reframing')
+	window.setTimeout(() => document.body.classList.remove('sparkler-reframing'), 800)
+	window.setTimeout(() => {
+		fountain.remove()
+		candle.classList.remove('is-lit', 'is-sparkling')
+		candle.setAttribute('aria-label', 'Vela de cumpleaños apagada')
+		document.body.classList.add('celebration-complete', 'sparkler-reframing')
+		document.body.classList.remove('sparkler-active')
+		window.setTimeout(() => document.body.classList.remove('sparkler-reframing'), 800)
+	}, 10000)
+}
+
 function initBirthdayCelebration() {
 	const candle = document.querySelector('.candle')
 	const wick = candle.querySelector('.candle-wick')
@@ -264,6 +318,7 @@ function initBirthdayCelebration() {
 		if (started) return
 		started = true
 		candle.classList.add('is-lit')
+		window.setTimeout(() => startBirthdaySparkler(candle), 5000)
 		finishDrag()
 		button.disabled = true
 		button.hidden = true
@@ -345,6 +400,25 @@ function initBirthdayCelebration() {
 
 window.addEventListener('DOMContentLoaded', () => {
 	initBirthdayCelebration()
+	const confetti = document.createElement('div')
+	confetti.className = 'cake-confetti'
+	confetti.setAttribute('aria-hidden', 'true')
+	const palette = ['#ff89b8', '#ffd575', '#b49aff', '#7cdbcf', '#fff1ca']
+	for (let i = 0; i < 44; i++) {
+		const piece = document.createElement('span')
+		const angle = Math.random() * Math.PI * 2
+		const radius = 210 + Math.random() * 120
+		piece.className = i % 3 === 0 ? 'cake-spark' : 'cake-confetti-piece'
+		piece.style.setProperty('--cx', `${Math.cos(angle) * radius}`)
+		piece.style.setProperty('--cy', `${Math.sin(angle) * radius}`)
+		piece.style.setProperty('--drift', `${Math.random() * 70 - 35}`)
+		piece.style.setProperty('--turn', `${Math.random() * 360}deg`)
+		piece.style.setProperty('--confetti-color', palette[i % palette.length])
+		piece.style.setProperty('--rise-time', `${7 + Math.random() * 6}s`)
+		piece.style.setProperty('--rise-delay', `${-Math.random() * 13}s`)
+		confetti.appendChild(piece)
+	}
+	document.querySelector('[data-scene]').appendChild(confetti)
 	// Capas reales en profundidad para el relieve del letrero.
 	const lettering = document.querySelector('.birthday-lettering')
 	const front = lettering.querySelector('.birthday-text-front')

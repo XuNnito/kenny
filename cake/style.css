@@ -1321,3 +1321,173 @@ body.galaxy-open [data-howto] { visibility: hidden; }
 @media (prefers-reduced-motion: reduce) {
   #galaxy-frame, body.galaxy-transition [data-camera] { transform: none; }
 }
+
+/* Chispas y confeti en el mismo espacio 3D del pastel. */
+.cake-confetti {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  transform-style: preserve-3d;
+  pointer-events: none;
+}
+.cake-confetti > span {
+  position: absolute;
+  width: calc(7 * var(--px));
+  height: calc(13 * var(--px));
+  background: var(--confetti-color);
+  border-radius: calc(1 * var(--px));
+  box-shadow: inset calc(-2 * var(--px)) 0 #0002;
+  animation: birthday-confetti-rise var(--rise-time) linear var(--rise-delay) infinite;
+  backface-visibility: visible;
+}
+.cake-confetti > .cake-spark {
+  width: calc(4 * var(--px));
+  height: calc(4 * var(--px));
+  border-radius: 50%;
+  background: #fff5d7;
+  box-shadow: 0 0 calc(7 * var(--px)) calc(2 * var(--px)) #ffc87088;
+}
+@keyframes birthday-confetti-rise {
+  0% {
+    opacity: 0;
+    transform: translate3d(calc(var(--cx) * var(--px)), calc(var(--cy) * var(--px)), calc(-20 * var(--px))) rotateX(0deg) rotateY(var(--turn));
+  }
+  12%, 75% { opacity: .9; }
+  100% {
+    opacity: 0;
+    transform: translate3d(calc((var(--cx) + var(--drift)) * var(--px)), calc((var(--cy) - 35) * var(--px)), calc(370 * var(--px))) rotateX(480deg) rotateY(calc(var(--turn) + 360deg));
+  }
+}
+body.galaxy-open .cake-confetti > span { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) {
+  .cake-confetti > span {
+    animation: none;
+    opacity: .65;
+    transform: translate3d(calc(var(--cx) * var(--px)), calc(var(--cy) * var(--px)), calc(80 * var(--px))) rotateY(var(--turn));
+  }
+}
+
+/* Fuente de cumpleaños: chorro vertical y chispas con profundidad real en Z. */
+.birthday-sparkler {
+  position: absolute;
+  width: 0;
+  height: 0;
+  transform: translateZ(calc(var(--candle-height) + 8 * var(--px)));
+  transform-style: preserve-3d;
+  pointer-events: none;
+}
+.sparkler-core {
+  position: absolute;
+  width: 0;
+  height: 0;
+  transform-style: preserve-3d;
+}
+.sparkler-core > span {
+  position: absolute;
+  width: calc(21 * var(--px));
+  height: calc(105 * var(--px));
+  transform-origin: 50% 100%;
+  transform: translate(-50%, -100%) rotateX(-90deg);
+  background: linear-gradient(to top, #fffdf0, #fff7d9 22%, #ffeeb4c9 55%, #ffdb7533 85%, transparent);
+  clip-path: polygon(35% 100%, 5% 58%, 30% 64%, 12% 25%, 44% 43%, 50% 0, 64% 35%, 87% 18%, 73% 63%, 100% 52%, 68% 100%);
+  filter: drop-shadow(0 0 calc(5 * var(--px)) #ffc34a);
+}
+.sparkler-core > span:nth-child(2) {
+  transform: translate(-50%, -100%) rotateZ(90deg) rotateX(-90deg);
+}
+.sparkler-particle {
+  position: absolute;
+  width: 0;
+  height: 0;
+  transform-style: preserve-3d;
+  animation: sparkler-flight var(--spark-duration) linear var(--spark-delay) 1 both;
+}
+.sparkler-particle::before,
+.sparkler-particle::after {
+  content: '';
+  position: absolute;
+  width: calc(1.6 * var(--px));
+  height: calc(var(--spark-length) * var(--px));
+  border-radius: 50%;
+  background: linear-gradient(to top, transparent, #ffda7e 30%, #fffdf0 75%);
+  box-shadow: 0 0 calc(3 * var(--px)) #ffbd4f, 0 0 calc(7 * var(--px)) #ffdf8766;
+  transform-origin: 50% 100%;
+  transform: translate(-50%, -100%) rotateX(-90deg) rotate(var(--spark-lean));
+}
+.sparkler-particle::after {
+  transform: translate(-50%, -100%) rotateZ(90deg) rotateX(-90deg) rotate(var(--spark-lean));
+}
+@keyframes sparkler-flight {
+  0% { opacity: 0; transform: translate3d(0, 0, 0) scale3d(.3, .3, .6); }
+  8% { opacity: 1; }
+  45% {
+    opacity: 1;
+    transform: translate3d(calc(var(--spark-x) * .45 * var(--px)), calc(var(--spark-y) * .45 * var(--px)), calc(var(--spark-height) * .82 * var(--px))) scale3d(1, 1, 1);
+  }
+  70% {
+    opacity: .85;
+    transform: translate3d(calc(var(--spark-x) * .75 * var(--px)), calc(var(--spark-y) * .75 * var(--px)), calc(var(--spark-height) * var(--px))) scale3d(.85, .85, .65);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(calc(var(--spark-x) * var(--px)), calc(var(--spark-y) * var(--px)), calc(var(--spark-height) * .65 * var(--px))) scale3d(.3, .3, .25);
+  }
+}
+.candle.is-sparkling .candle-glow {
+  width: calc(190 * var(--px));
+  height: calc(190 * var(--px));
+  background: radial-gradient(circle, #fff2b28c, #ffd16b35 40%, transparent 70%);
+}
+body.galaxy-open .sparkler-particle { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) {
+  .sparkler-particle { animation: none; display: none; }
+}
+
+/* Dejar espacio sobre la mecha para ver la fuente completa. */
+body.sparkler-active [data-camera] {
+  --celebration-scale: .82;
+  --celebration-shift: min(6vh, 44px);
+}
+body.sparkler-reframing [data-scene] { transition: transform .7s ease; }
+@media (prefers-reduced-motion: reduce) {
+  body.sparkler-reframing [data-scene] { transition: none; }
+}
+
+/* Explosión breve y lluvia de confeti: sin repetición. */
+.sparkler-core { animation: birthday-burst-flash .55s ease-out both; }
+@keyframes birthday-burst-flash {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+.candle-burst-confetti {
+  position: absolute;
+  width: calc(7 * var(--px));
+  height: calc(12 * var(--px));
+  border-radius: calc(1 * var(--px));
+  background: var(--burst-color);
+  box-shadow: inset calc(-2 * var(--px)) 0 #0003;
+  backface-visibility: visible;
+  animation: candle-confetti-explosion var(--burst-duration) linear var(--burst-delay) 1 both;
+}
+@keyframes candle-confetti-explosion {
+  0% { opacity: 0; transform: translate3d(0, 0, 0) scale(.3); }
+  3% { opacity: 1; }
+  22% {
+    opacity: 1;
+    transform: translate3d(calc(var(--burst-x) * .55 * var(--px)), calc(var(--burst-y) * .55 * var(--px)), calc(var(--burst-height) * var(--px))) rotateX(160deg) rotateY(90deg);
+  }
+  65% {
+    opacity: .9;
+    transform: translate3d(calc(var(--burst-x) * .9 * var(--px)), calc(var(--burst-y) * .9 * var(--px)), calc(15 * var(--px))) rotateX(var(--burst-spin)) rotateY(240deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(calc(var(--burst-x) * var(--px)), calc(var(--burst-y) * var(--px)), calc(-210 * var(--px))) rotateX(var(--burst-spin)) rotateY(480deg);
+  }
+}
+body.celebration-complete .cake-confetti { display: none; }
+@media (prefers-reduced-motion: reduce) {
+  .candle-burst-confetti, .sparkler-core { display: none; animation: none; }
+}
