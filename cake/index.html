@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="./style.css">
+	<link rel="icon" type="image/png" href="../icono.png">
+	<link rel="apple-touch-icon" href="../icono.png">
+	<meta name="theme-color" content="#e2cec4">
+	<meta name="description" content="Para Kenny...">
+	<meta property="og:type" content="website">
+	<meta property="og:title" content="Cumpleaños de Kenny">
+	<meta property="og:description" content="Felicidades, Kenny!">
+	<meta property="og:image" content="../icono.png">
+	<meta property="og:image:alt" content="cumpleaños para Kenny">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:title" content="Kenny"Kenni">
+	<meta name="twitter:image" content="../icono.png">
+	<title>Cumpleaños para Kenny</title>
+</head>
+<body>
+
+<div id="galaxy-reveal" aria-hidden="true">
+	<iframe id="galaxy-frame" src="../index.html?from=cake" title="Galaxia de amor para Kenny" tabindex="-1"></iframe>
+</div>
+<button id="return-to-cake" type="button" aria-label="Volver al pastel" hidden>
+	<svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="m14 6-6 6 6 6M8 12h12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</button>
+
+<!-- I'm excited, and you? o(^▽^)o -->
+<!-- hint: try dragging or double-clicking the model -->
+
+<!-- ? orbit (Y-axis) -->
+<section data-camera>
+	<!-- ? orbital (X-axis) -->
+	<section data-scene>
+		<!-- * relevant portion -->
+		<!-- TODO .plate -->
+		<div class="n-gon plate" data-3d>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+		</div>
+
+		<!-- TODO .cake-base -->
+		<div class="n-gon cake-base" data-slice data-3d>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+		</div>
+
+		<!-- TODO .base-edges -->
+		<!-- !ISSUE makes rendering slow -->
+		<!-- <div class="n-gon n-gon-sub base-edges" data-slice data-3d>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+				</div> -->
+
+		<!-- TODO .strawberries -->
+		<div class="spheres strawberries" data-3d>
+			<div>
+				<div class="sphere"></div>
+				<div class="leaf l1"></div>
+			</div>
+			<div><div class="sphere"></div></div>
+			<div><div class="sphere"></div></div>
+			<div>
+				<div class="sphere"></div>
+				<div class="leaf l4"></div>
+				<div class="leaf l4 l5"></div>
+				<div class="leaf l4 l5 l6"></div>
+			</div>
+			<div><div class="sphere"></div></div>
+			<div><div class="sphere"></div></div>
+			<div>
+				<div class="sphere"></div>
+				<div class="leaf l7"></div>
+			</div>
+			<div><div class="sphere"></div></div>
+			<div>
+				<div class="sphere"></div>
+				<div class="leaf l7 l8"></div>
+			</div>
+			<div>
+				<div class="sphere"></div>
+				<div class="leaf l7 l9"></div>
+			</div>
+		</div>
+
+		<!-- Vela sobre la cobertura, dentro de la misma escena 3D. -->
+		<div class="candle" role="img" aria-label="Vela de cumpleaños apagada">
+			<div class="candle-glow"></div>
+			<div class="candle-body"></div>
+			<div class="candle-cap"></div>
+			<div class="candle-wick"></div>
+			<div class="candle-flame">
+				<span></span><span></span><span></span><span></span>
+			</div>
+		</div>
+
+		<div class="birthday-topper" role="img" aria-label="Feliz cumpleaños Kenny">
+			<span class="topper-stick topper-stick-left" aria-hidden="true"></span>
+			<span class="topper-stick topper-stick-right" aria-hidden="true"></span>
+			<div class="birthday-lettering" aria-hidden="true">
+				<div class="birthday-text birthday-text-front"><span>Feliz cumpleaños</span><strong>Kenny</strong></div>
+			</div>
+		</div>
+
+		<!-- TODO .shadows -->
+		<div class="cake-base-shadow"></div>
+	</section>
+</section>
+
+<!-- ? information -->
+<article id="howto">
+	<a href="#" aria-label="close this modal" data-close></a>
+	<article data-desc>
+		<h1>Supported Gestures</h1>
+		<ul data-desktop>
+			<li><i>Drag:</i> Rotate</li>
+			<li><kbd>ctrl</kbd> + <i>Drag:</i> Pan (XY)</li>
+			<li><kbd>alt</kbd> + <i>Drag:</i> Pan (Z)</li>
+			<li><kbd>shift</kbd> + <i>Drag:</i> Perspective</li>
+			<li><i>Wheel:</i> Zoom</li>
+			<li><kbd>ctrl</kbd> + <i>Wheel:</i> Fast Zoom</li>
+			<li><i>Double click:</i> Toggle auto-rotate (Z)</li>
+		</ul>
+		<ul data-mobile>
+			<li><i>Drag:</i> Rotate</li>
+			<li><i>Pinch:</i> Zoom</li>
+			<li><i>Double tap:</i> Toggle auto-rotate (Z)</li>
+		</ul>
+	</article>
+</article>
+
+<!-- ? information hyperlink -->
+<a
+	href="#howto"
+	aria-label="learn how to operate this pen"
+	data-howto
+	data-isolated
+	>How to?</a
+>
+
+<div class="birthday-controls">
+	<div id="lighter-hint" role="tooltip">Para encender la vela, arrastra el encendedor</div>
+	<button type="button" id="light-candle" aria-describedby="lighter-hint" aria-label="Mantén presionado y arrastra el encendedor a la mecha. Con teclado, pulsa Enter para encender.">
+		<img class="lighter-icon" src="./encendedor-3d.png" alt="" draggable="false">
+	</button>
+	<audio id="birthday-music" preload="none" controls loop hidden src="./Mañanitas.mp3">Tu navegador no admite audio.</audio>
+</div>
+
+<script src="./script.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,36 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  overflow: hidden;
+  background-color: #05000a;
+  font-family: sans-serif;
+  color: #fff;
+}
+
+#canvas-container {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
+.Para_Ti {
+  position: absolute;
+  width: 90%;
+  font-size: 2.2rem;
+  font-family: "Brush Script MT", cursive, sans-serif;
+  color: #ff69b4;
+  text-shadow: 0 0 10px #ff1493, 0 0 20px #ff69b4, 0 0 30px #ff1493;
+  transform: translateX(-50%);
+  left: 50%;
+  bottom: 40px;
+  text-align: center;
+  z-index: 10;
+  pointer-events: none;
+}
